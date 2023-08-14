@@ -175,6 +175,22 @@ public struct DatePicker<Label: View>: View {
     }
   }
   
+  private var isWatchOS10: Bool {
+    if #available(watchOS 10, *) {
+      return true
+    }
+    
+    return false
+  }
+  
+  private func timeInputViewTopPadding(_ proxy: GeometryProxy) -> CGFloat {
+    if isWatchOS10 {
+      return max(proxy.safeAreaInsets.bottom, 27)
+    }
+    
+    return -5.0
+  }
+  
   @ViewBuilder private var mainBody: some View {
     GeometryReader { rootProxy in
       switch displayedComponents {
@@ -182,11 +198,12 @@ public struct DatePicker<Label: View>: View {
         NavigationView {
           VStack {
             DateInputView(selection: $newSelection, minimumDate: minimumDate, maximumDate: maximumDate)
-              .watchStatusBar(hidden: true)
+              .watchStatusBar(hidden: !isWatchOS10)
               .overlay {
                 NavigationLink(isActive: $secondViewIsPresented) {
                   TimeInputView(selection: $newSelection)
                     .padding(-5)
+                    .padding(.top, timeInputViewTopPadding(rootProxy))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .edgesIgnoringSafeArea(.all)
                     .navigationTitle(formattedNavigationTitle)
