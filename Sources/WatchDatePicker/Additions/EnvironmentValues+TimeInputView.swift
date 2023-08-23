@@ -1,12 +1,10 @@
 #if os(watchOS)
+
 import SwiftUI
 
 // TODO: add full mark customization for watchOS 9 using AnyShape
 
 @available(watchOS 8, *)
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
 public extension View {
   /// Sets whether time input views use a monospaced digit font within this view.
   /// - Parameters:
@@ -35,14 +33,21 @@ public extension View {
   func timeInputViewAMPMHighlightTint(_ tint: Color?) -> some View {
     environment(\.timeInputViewAMPMHighlightTint, tint)
   }
-  
+
+  /// Sets the color for the component borders of time input views within this view.
+  /// - Parameters:
+  ///   - tint: The color for the component borders.
+  func timeInputViewComponentBorderColor(_ color: Color?) -> some View {
+    environment(\.timeInputViewComponentBorderColor, color)
+  }
+
   /// Sets the color for the focus outline of time input views within this view.
   /// - Parameters:
   ///   - tint: The color for the focus outline.
   func timeInputViewFocusTint(_ tint: Color?) -> some View {
     environment(\.timeInputViewFocusTint, tint)
   }
-  
+
   /// Sets the color for the selection indicator of time input views within this view.
   /// - Parameters:
   ///   - tint: The color for the selection indicator.
@@ -56,21 +61,21 @@ public extension View {
 //@available(iOS, unavailable)
 //@available(tvOS, unavailable)
 //public extension View {
-//  /// Sets the shape used for marks in clock faces of time input views within this view.
+//  /// Sets the shape used for marks in clock dials of time input views within this view.
 //  /// - Parameters:
 //  ///   - tint: …
 //  func timeInputViewMark<Content: View>(@ViewBuilder content: () -> Content) -> some View {
 //    environment(\.timeInputViewMark, AnyShape(content()))
 //  }
 //
-//  /// Sets the shape used for heavy marks in clock faces of time input views within this view.
+//  /// Sets the shape used for heavy marks in clock dials of time input views within this view.
 //  /// - Parameters:
 //  ///   - tint: …
 //  func timeInputViewHeavyMark<Content: View>(@ViewBuilder content: () -> Content) -> some View {
 //    environment(\.timeInputViewHeavyMark, AnyShape(content()))
 //  }
 //
-//  /// Sets the shape used for the selection indicator in clock faces of time input views within this view.
+//  /// Sets the shape used for the selection indicator in clock dials of time input views within this view.
 //  /// - Parameters:
 //  ///   - tint: …
 //  func timeInputViewSelectionIndicator<Content: View>(@ViewBuilder content: () -> Content) -> some View {
@@ -79,9 +84,6 @@ public extension View {
 //}
 
 @available(watchOS 8, *)
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
 public extension EnvironmentValues {
   var timeInputViewMonospacedDigit: Bool? {
     get { self[TimeInputViewMonospacedDigitKey.self] }
@@ -102,12 +104,17 @@ public extension EnvironmentValues {
     get { self[TimeInputViewAMPMHighlightTintKey.self] }
     set { self[TimeInputViewAMPMHighlightTintKey.self] = newValue }
   }
-  
+
+  var timeInputViewComponentBorderColor: Color? {
+    get { self[TimeInputViewComponentBorderColorKey.self] }
+    set { self[TimeInputViewComponentBorderColorKey.self] = newValue }
+  }
+
   var timeInputViewFocusTint: Color? {
     get { self[TimeInputViewFocusTintKey.self] }
     set { self[TimeInputViewFocusTintKey.self] = newValue }
   }
-  
+
   var timeInputViewSelectionTint: Color? {
     get { self[TimeInputViewSelectionTintKey.self] }
     set { self[TimeInputViewSelectionTintKey.self] = newValue }
@@ -139,7 +146,8 @@ struct TimeInputViewMonospacedDigitKey: EnvironmentKey { static let defaultValue
 struct TimeInputViewTwentyFourHourKey: EnvironmentKey { static let defaultValue: Bool? = nil }
 struct TimeInputViewTwentyFourHourIndicatorKey: EnvironmentKey { static let defaultValue: Visibility = .automatic }
 struct TimeInputViewAMPMHighlightTintKey: EnvironmentKey { static let defaultValue: Color? = nil }
-struct TimeInputViewFocusTintKey: EnvironmentKey { static let defaultValue: Color? = .green }
+struct TimeInputViewComponentBorderColorKey: EnvironmentKey { static let defaultValue: Color? = nil }
+struct TimeInputViewFocusTintKey: EnvironmentKey { static let defaultValue: Color? = nil }
 struct TimeInputViewSelectionTintKey: EnvironmentKey { static let defaultValue: Color? = nil }
 
 //@available(watchOS 9, *)
@@ -148,4 +156,5 @@ struct TimeInputViewSelectionTintKey: EnvironmentKey { static let defaultValue: 
 //struct TimeInputViewHeavyMarkKey: EnvironmentKey { static let defaultValue: AnyShape? = nil }
 //@available(watchOS 9, *)
 //struct TimeInputViewSelectionIndicatorKey: EnvironmentKey { static let defaultValue: AnyShape? = nil }
+
 #endif

@@ -1,0 +1,27 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.os }}, swift${{ matrix.swift }}, ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['macos-12']
+        platform: ['watchOS', 'iOS']
+        swift: [~5.6, ~5.7]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: mxcl/xcodebuild@v.1.12.0
+      with:
+        working-directory: ./Examples
+        swift: ${{ matrix.swift }}
+        platform: ${{ matrix.platform }}
+        scheme: WatchDatePicker
+        action: build

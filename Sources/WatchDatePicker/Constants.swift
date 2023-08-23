@@ -1,10 +1,10 @@
 #if os(watchOS)
+
 import SwiftUI
 import WatchKit
 
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
+let isTakingScreenshots = ProcessInfo.processInfo.environment["WDP_SCREENSHOTS"] == "1"
+
 enum WatchDeviceSize: Double {
   case _40mm = 162
   case _41mm = 176
@@ -17,23 +17,6 @@ enum WatchDeviceSize: Double {
   }
 }
 
-//enum WatchDeviceSize2 {
-//  case _40mm, _41mm, _44mm, _45mm
-//
-//  static var current: Self {
-//    switch WKInterfaceDevice.current().screenBounds.width {
-//    case 162: return ._40mm
-//    case 176: return ._41mm
-//    case 184: return ._44mm
-//    case 198: return ._45mm
-//    default: return ._45mm
-//    }
-//  }
-//}
-
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
 extension CGFloat {
   static var selectionIndicatorRadius: Self {
     switch WatchDeviceSize.current {
@@ -42,6 +25,20 @@ extension CGFloat {
     }
   }
   
+  static var pickerCornerRadius: Self {
+    switch WatchDeviceSize.current {
+    case ._41mm, ._45mm, ._49mm: return 15
+    default: return 8.5
+    }
+  }
+
+  static var pickerFontSize: Self {
+    switch WatchDeviceSize.current {
+    case ._40mm: return 21
+    default: return 23
+    }
+  }
+
   static var pickerLabelMinimumScaleFactor: Self {
     switch WatchDeviceSize.current {
     case ._41mm, ._45mm, ._49mm: return 0.8
@@ -50,9 +47,6 @@ extension CGFloat {
   }
 }
 
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
 extension CGSize {
   static var heavyMarkSize: Self {
     switch WatchDeviceSize.current {
@@ -69,10 +63,8 @@ extension CGSize {
   }
 }
 
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
 extension Color {
   static let timeComponentButtonBorder = Color(white: 0.298)
 }
+
 #endif

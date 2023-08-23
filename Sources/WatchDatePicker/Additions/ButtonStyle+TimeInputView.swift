@@ -1,4 +1,5 @@
 #if os(watchOS)
+
 import SwiftUI
 
 private let SUGGESTED_HEIGHT: CGFloat = 48.0
@@ -12,14 +13,12 @@ extension ButtonStyle where Self == TimeComponentButtonStyle {
   }
 }
 
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
 struct TimeComponentButtonStyle: ButtonStyle {
   @State private var padding: CGFloat = 0.0
   
   var isFocused: Bool
 
+  @Environment(\.timeInputViewComponentBorderColor) private var borderColor
   @Environment(\.timeInputViewFocusTint) private var focusTint
   @Environment(\.timeInputViewMonospacedDigit) private var useMonospacedFont
 
@@ -37,7 +36,10 @@ struct TimeComponentButtonStyle: ButtonStyle {
       })
       .overlay {
         RoundedRectangle(cornerRadius: 8)
-          .strokeBorder(isFocused ? focusTint ?? .green : .timeComponentButtonBorder, lineWidth: 1.5)
+          .strokeBorder(
+            isFocused ? focusTint ?? .green : borderColor ?? .timeComponentButtonBorder,
+            lineWidth: 1.5
+          )
       }
   }
   
@@ -59,23 +61,18 @@ struct TimeComponentButtonStyle: ButtonStyle {
   }
 }
 
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
 extension ButtonStyle where Self == TimePeriodButtonStyle {
   static func timePeriod(isHighlighted: Bool = false) -> Self {
     .init(isHighlighted: isHighlighted)
   }
 }
 
-@available(macOS, unavailable)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
 struct TimePeriodButtonStyle: ButtonStyle {
   var isHighlighted: Bool
 
+  @Environment(\.locale) private var locale
   @Environment(\.timeInputViewAMPMHighlightTint) private var highlightTint
-  
+
   func makeBody(configuration: Configuration) -> some View {
     let tint = highlightTint.map { AnyShapeStyle($0) } ?? AnyShapeStyle(.tint)
     return configuration.label
@@ -83,11 +80,13 @@ struct TimePeriodButtonStyle: ButtonStyle {
       .font(isHighlighted ? .body.bold() : .body)
       .opacity(configuration.isPressed ? 0.5 : isHighlighted ? 1 : 0.8)
       .foregroundStyle(isHighlighted ? AnyShapeStyle(.black) : tint)
+      .offset(y: ["ar", "hi"].contains(locale.identifier) ? -3 : 0)
       .background {
-        RoundedRectangle(cornerRadius: 4)
-          .fill(isHighlighted ? tint : AnyShapeStyle(.clear))
+        RoundedRectangle(cornerRadius: .timePeriodButtonCornerRadius)
+          .fill(isHighlighted ? tint : AnyShapeStyle(.black))
           .offset(y: 0.5)
       }
   }
 }
+
 #endif
