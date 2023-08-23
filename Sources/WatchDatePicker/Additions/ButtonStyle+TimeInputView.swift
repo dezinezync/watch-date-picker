@@ -82,7 +82,7 @@ struct TimePeriodButtonStyle: ButtonStyle {
       .foregroundStyle(isHighlighted ? AnyShapeStyle(.black) : tint)
       .offset(y: ["ar", "hi"].contains(locale.identifier) ? -3 : 0)
       .background {
-        RoundedRectangle(cornerRadius: .timePeriodButtonCornerRadius)
+        Capsule(style: .continuous)
           .fill(isHighlighted ? tint : AnyShapeStyle(.black))
           .offset(y: 0.5)
       }

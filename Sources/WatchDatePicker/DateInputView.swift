@@ -152,7 +152,7 @@ public struct DateInputView: View {
     .textCase(textCase)
     .padding(.horizontal, 0.5)
     .padding(.vertical, 5)
-    .frame(height: .dateInputHeight)
+    .frame(maxHeight: .infinity)
     .onChange(of: year) { _ in selectionPublisher.send() }
     .onChange(of: month) { _ in selectionPublisher.send() }
     .onChange(of: day) { _ in selectionPublisher.send() }

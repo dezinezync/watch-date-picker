@@ -121,7 +121,7 @@ public struct TimeInputView: View {
       clockFace
         .accessibilityHidden(true)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.clockFacePadding)
+        .padding()
         //.drawingGroup(opaque: true)
 
       if !twentyFourHour {
@@ -283,7 +283,7 @@ public struct TimeInputView: View {
       .font(.system(size: 12.5, weight: .regular))
       .textCase(.uppercase)
       .opacity(twentyFourHourIndicatorVisibility != .hidden ? 1 : 0)
-      .offset(y: .twentyFourHourIndicatorOffset)
+      //.offset(y: .twentyFourHourIndicatorOffset)
   }
 
   private var localizedHourPeriodSymbol: String {
@@ -316,7 +316,7 @@ public struct TimeInputView: View {
       .accessibilityAddTraits(hourPeriod == .am ? .isSelected : [])
       .buttonStyle(.timePeriod(isHighlighted: hourPeriod == .am))
 
-      Spacer(minLength: .timeComponentButtonHeight + 16)
+      Spacer(minLength: 16 + 16)
 
       Button(action: { setHourPeriod(.pm) }) {
         Text(verbatim: locale.calendar.pmSymbol)
@@ -403,8 +403,8 @@ public struct TimeInputView: View {
     }
     .font(
       monospacedDigit == true
-      ? .system(size: .componentFontSize).monospacedDigit()
-      : .system(size: .componentFontSize)
+      ? .system(size: 12).monospacedDigit()
+      : .system(size: 12)
     )
     .onChange(of: accessibilityFocusedComponent) {
       guard let component = $0 else { return }
@@ -426,8 +426,8 @@ struct TimeInputView_Previews: PreviewProvider {
           .offset(y: 10)
 
         circularButtons
-          .padding(.bottom, .hourAndMinuteCircularButtonsBottomPadding)
-          .padding(.horizontal, .hourAndMinuteCircularButtonsHorizontalPadding)
+          .scenePadding(.minimum, edges: .bottom)
+          .scenePadding(.minimum, edges: .horizontal)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .navigationBarHidden(true)

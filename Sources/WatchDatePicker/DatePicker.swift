@@ -189,8 +189,6 @@ public struct DatePicker<Label: View>: View {
         }
       }
     }
-    
-    return false
   }
 
  private func timeInputViewTopPadding(_ proxy: GeometryProxy) -> CGFloat {
@@ -207,12 +205,12 @@ public struct DatePicker<Label: View>: View {
         .offset(y: 10)
 
       circularButtons
-        .padding(.bottom, .hourAndMinuteCircularButtonsBottomPadding)
-        .padding(.horizontal, .hourAndMinuteCircularButtonsHorizontalPadding)
+        .scenePadding(.minimum, edges: .bottom)
+        .scenePadding(.minimum, edges: .horizontal)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .navigationBarHidden(true)
-    .watchStatusBar(hidden: true)
+    .navigationBarHidden( !isWatchOS10)
+    .watchStatusBar(hidden: !isWatchOS10)
     .edgesIgnoringSafeArea(.all)
     .padding(.bottom, -40)
     .padding(.horizontal, -32)
@@ -227,15 +225,12 @@ public struct DatePicker<Label: View>: View {
           .padding(8)
       }
     }
-    
-    return -5.0
   }
 
   @ViewBuilder private var mainBody: some View {
-    GeometryReader { rootProxy in
-      switch displayedComponents {
-      case [.date, .hourAndMinute]:
-        NavigationView {
+    switch displayedComponents {
+    case [.date, .hourAndMinute]:
+      NavigationView {
         dateInput
           .overlay {
             NavigationLink(isActive: $secondViewIsPresented) {
@@ -244,59 +239,19 @@ public struct DatePicker<Label: View>: View {
               EmptyView()
             }
             .hidden()
-              }
-            
-            confirmationButton
           }
-          .edgesIgnoringSafeArea(.bottom)
-          .scenePadding(.bottom)
-        }
         
-      case .date:
-        VStack(spacing: 10) {
-          DateInputView(selection: $newSelection, minimumDate: minimumDate, maximumDate: maximumDate)
-            .frame(height: max(120, WKInterfaceDevice.current().screenBounds.height * 0.55))
-          // .padding(.top, 20)
-          // .onAppear { print(WKInterfaceDevice.current().screenBounds.height * 0.6) }
-          
-          circularButtons
-            .padding(.bottom, -21)
-        }
-        .frame(maxHeight: .infinity)
-        .edgesIgnoringSafeArea(.all)
-        .navigationBarHidden(true)
-        // ._statusBar(hidden: true)
-        .watchStatusBar(hidden: true)
-        
-      case .hourAndMinute:
-        ZStack(alignment: .bottom) {
-          TimeInputView(selection: $newSelection)
-            .offset(y: rootProxy.safeAreaInsets.bottom * -0.5)
-          
-          circularButtons
-            .padding(.bottom, rootProxy.safeAreaInsets.bottom * 0.5)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .navigationBarHidden(true)
-        .watchStatusBar(hidden: true)
-        .toolbar {
-          ToolbarItem(placement: .confirmationAction) {
-            Button("", action: {})
-              .accessibilityHidden(true)
-          }
-        }
-        .edgesIgnoringSafeArea(.all)
-        
-      default:
-        fatalError()
+        confirmationButton
       }
-
+      .edgesIgnoringSafeArea(.bottom)
+      .scenePadding(.bottom)
+      
     case .date:
       dateInput
-
+      
     case .hourAndMinute:
       timeInput
-
+      
     default:
       fatalError()
     }
