@@ -101,7 +101,7 @@ public struct DatePicker<Label: View>: View {
   
   private var circularButtons: some View {
     HStack {
-      if displayedComponents == [.date, .hourAndMinute] {
+      if displayedComponents == [.date, .hourAndMinute], !isWatchOS10 {
         Button(action: { secondViewIsPresented = false }) {
           Image(systemName: "chevron.backward")
         }
@@ -177,7 +177,9 @@ public struct DatePicker<Label: View>: View {
       DateInputView(selection: $newSelection, minimumDate: minimumDate, maximumDate: maximumDate)
         .padding(.top, 20)
 
-      confirmationButton
+      if displayedComponents == [.date] {
+        confirmationButton
+      }
     }
     .edgesIgnoringSafeArea([.bottom, .horizontal])
     .toolbar {
@@ -191,30 +193,21 @@ public struct DatePicker<Label: View>: View {
     }
   }
 
- private func timeInputViewTopPadding(_ proxy: GeometryProxy) -> CGFloat {
-    if isWatchOS10 {
-      return max(proxy.safeAreaInsets.bottom, 27)
-    }
-    
-    return -5.0
-  }
-
   private var timeInput: some View {
     ZStack(alignment: .bottom) {
       TimeInputView(selection: $newSelection)
-        .offset(y: 10)
 
       circularButtons
-        .scenePadding(.minimum, edges: .bottom)
-        .scenePadding(.minimum, edges: .horizontal)
+        .padding(.bottom, 16)
+        .padding(.horizontal, -24)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .navigationBarHidden( !isWatchOS10)
     .watchStatusBar(hidden: !isWatchOS10)
     .edgesIgnoringSafeArea(.all)
     .padding(.bottom, -40)
-    .padding(.horizontal, -32)
-    .offset(y: -45)
+    .padding(.horizontal, 20)
+    //.offset(y: -45)
     .overlay(alignment: .topTrailing) {
       if selectionIsOptional, displayedComponents == .hourAndMinute {
         Button(action: clear) { Image(systemName: "trash.fill") }
