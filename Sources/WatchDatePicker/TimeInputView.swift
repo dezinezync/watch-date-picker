@@ -219,11 +219,11 @@ public struct TimeInputView: View {
 
   private func marks(for component: Component, with geometry: GeometryProxy) -> some View {
     if twentyFourHour && component == .hour {
-      return ForEach(0..<48) { index in
+      return ForEach(0..<48, id: \.self) { index in
         mark(at: index, multiple: 48, heavy: index % 4 == 0, with: geometry)
       }
     } else {
-      return ForEach(0..<60) { index in
+      return ForEach(0..<60, id: \.self) { index in
         mark(at: index, multiple: 60, heavy: index % 5 == 0, with: geometry)
       }
     }
