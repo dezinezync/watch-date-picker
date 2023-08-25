@@ -274,6 +274,11 @@ public struct DatePicker<Label: View>: View {
       if !$0 { secondViewIsPresented = false }
       newSelection = selection ?? defaultSelection
     }
+    .onChange(of: selection) { newValue in
+      if newSelection != newValue {
+        newSelection = newValue ?? defaultSelection
+      }
+    }
   }
 }
 
