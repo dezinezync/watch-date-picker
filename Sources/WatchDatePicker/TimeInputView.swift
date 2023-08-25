@@ -188,17 +188,17 @@ public struct TimeInputView: View {
     switch focusedComponent {
     case .hour:
       if twentyFourHour {
-        return ForEach(0..<12) { index in
+        return ForEach(0..<12, id: \.self) { index in
           label(Int(index * 2), at: index, with: geometry, zeroPadded: true)
         }
       } else {
-        return ForEach(0..<12) { index in
+        return ForEach(0..<12, id: \.self) { index in
           label(Int(index == 0 ? 12 : index), at: index, with: geometry)
         }
       }
 
     case .minute:
-      return ForEach(0..<12) { index in
+      return ForEach(0..<12, id: \.self) { index in
         label(Int(index * 5), at: index, with: geometry, zeroPadded: true)
       }
     }
@@ -330,7 +330,7 @@ public struct TimeInputView: View {
   }
 
   @ViewBuilder private var timeSeparatorView: some View {
-#if swift(>=5.7)
+    #if swift(>=5.7)
     if #available(watchOS 9.1, *) {
       Text(timeSeparator)
         .fontDesign(.default)
@@ -339,10 +339,10 @@ public struct TimeInputView: View {
       Text(timeSeparator)
         .accessibilityHidden(true)
     }
-#else
+    #else
     Text(timeSeparator)
       .accessibilityHidden(true)
-#endif
+    #endif
   }
 
   private var pickerButtons: some View {
