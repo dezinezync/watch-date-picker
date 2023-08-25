@@ -408,9 +408,10 @@ public struct TimeInputView: View {
     }
     .font(
       monospacedDigit == true
-      ? .body.monospacedDigit()
-      : .body
+      ? .title3.monospacedDigit()
+      : .title3
     )
+    .fontWeight(.medium)
     .onChange(of: accessibilityFocusedComponent) {
       guard let component = $0 else { return }
       focusedComponent = component
