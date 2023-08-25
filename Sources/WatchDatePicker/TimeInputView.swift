@@ -129,9 +129,9 @@ public struct TimeInputView: View {
       }
 
       pickerButtons
-        .overlay(alignment: .top) {
-          if twentyFourHour { twentyFourHourIndicator }
-        }
+//        .overlay(alignment: .top) {
+//          if twentyFourHour { twentyFourHourIndicator }
+//        }
     }
     .accessibilityElement(children: isTakingScreenshots ? .contain : .ignore)
     .environment(\.layoutDirection, .leftToRight)
