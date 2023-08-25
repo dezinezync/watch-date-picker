@@ -49,7 +49,7 @@ public struct TimeInputView: View {
 
   private var selectionPublisher = PassthroughSubject<Void, Never>()
 
-  private var hourBinding: Binding<Double> { Binding { Double(hour) } set: { print($0); hour = Int($0) } }
+  private var hourBinding: Binding<Double> { Binding { Double(hour) } set: { hour = Int($0) } }
   private var minuteBinding: Binding<Double> { Binding { Double(minute) } set: { minute = Int($0) } }
 
   private var hourMultiple: Int { twentyFourHour ? 24 : 12 }
