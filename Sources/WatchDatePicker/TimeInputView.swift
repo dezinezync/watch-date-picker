@@ -374,6 +374,7 @@ public struct TimeInputView: View {
         .focused($systemFocusedComponent, equals: .hour)
 
       timeSeparatorView
+        .offset(x: 0, y: 12)
 
       Button(action: { focusedComponent = .minute }) { formattedMinute }
         .buttonStyle(.timeComponent(isFocused: focusedComponent == .minute))
