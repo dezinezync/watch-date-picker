@@ -129,9 +129,9 @@ public struct TimeInputView: View {
       }
 
       pickerButtons
-//        .overlay(alignment: .top) {
-//          if twentyFourHour { twentyFourHourIndicator }
-//        }
+        .overlay(alignment: .top) {
+          if twentyFourHour { twentyFourHourIndicator }
+        }
     }
     .accessibilityElement(children: isTakingScreenshots ? .contain : .ignore)
     .environment(\.layoutDirection, .leftToRight)
@@ -280,10 +280,14 @@ public struct TimeInputView: View {
 
   private var twentyFourHourIndicator: some View {
     Text(twentyFourHourIndicatorString)
-      .font(.system(size: 12.5, weight: .regular))
+      .font(.footnote)
       .textCase(.uppercase)
       .opacity(twentyFourHourIndicatorVisibility != .hidden ? 1 : 0)
-      //.offset(y: .twentyFourHourIndicatorOffset)
+      .offset(y: twentryFourHourYOffset)
+  }
+  
+  private var twentryFourHourYOffset: CGFloat {
+    clockFaceSize.height - rootSize.height - 20.0
   }
 
   private var localizedHourPeriodSymbol: String {
