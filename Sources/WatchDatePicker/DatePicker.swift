@@ -101,33 +101,42 @@ public struct DatePicker<Label: View>: View {
   
   private var circularButtons: some View {
     HStack {
-      if displayedComponents == [.date, .hourAndMinute], !isWatchOS10 {
-        Button(action: { secondViewIsPresented = false }) {
-          Image(systemName: "chevron.backward")
-        }
-        .accessibilityLabel(Text("Back", bundle: .module))
-        .accessibilityIdentifier("BackButton")
-        .buttonStyle(.circular())
-      } else {
-        Button(action: { isPresented = false }) {
-          Image(systemName: "xmark")
-        }
-        .accessibilityLabel(Text("Cancel", bundle: .module))
-        .accessibilityIdentifier("CancelButton")
-        .buttonStyle(.circular())
-      }
+      cancelOrBackButton
       
       Spacer()
       
-      Button(action: submit) {
-        Image(systemName: "checkmark")
-      }
-      .accessibilityLabel(Text("Done", bundle: .module))
-      .accessibilityIdentifier("DoneButton")
-      .accessibilityRemoveTraits(.isSelected)
-      .buttonStyle(.circular(confirmationTint ?? .green))
+      submitButton
     }
     .padding(.horizontal, 12)
+  }
+  
+  @ViewBuilder private var cancelOrBackButton: some View {
+    if displayedComponents == [.date, .hourAndMinute], !isWatchOS10 {
+      Button(action: { secondViewIsPresented = false }) {
+        Image(systemName: "chevron.backward")
+      }
+      .accessibilityLabel(Text("Back", bundle: .module))
+      .accessibilityIdentifier("BackButton")
+      .buttonStyle(.circular())
+    } 
+    else {
+      Button(action: { isPresented = false }) {
+        Image(systemName: "xmark")
+      }
+      .accessibilityLabel(Text("Cancel", bundle: .module))
+      .accessibilityIdentifier("CancelButton")
+      .buttonStyle(.circular())
+    }
+  }
+  
+  @ViewBuilder private var submitButton: some View {
+    Button(action: submit) {
+      Image(systemName: "checkmark")
+    }
+    .accessibilityLabel(Text("Done", bundle: .module))
+    .accessibilityIdentifier("DoneButton")
+    .accessibilityRemoveTraits(.isSelected)
+    .buttonStyle(.circular(confirmationTint ?? .green))
   }
 
   private func submit() {
@@ -197,9 +206,11 @@ public struct DatePicker<Label: View>: View {
     ZStack(alignment: .bottom) {
       TimeInputView(selection: $newSelection)
 
-      circularButtons
-        .padding(.bottom, 16)
-        .padding(.horizontal, -24)
+      if #unavailable(watchOS 10) {
+        circularButtons
+          .padding(.bottom, 16)
+          .padding(.horizontal, -24)
+      }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .navigationBarHidden( !isWatchOS10)
@@ -216,6 +227,19 @@ public struct DatePicker<Label: View>: View {
           .buttonStyle(.smallCircular(.red))
           .offset(y: -30)
           .padding(8)
+      }
+    }
+    .toolbar {
+      if #available(watchOS 10, *) {
+        if !displayedComponents.contains(.date) {
+          ToolbarItem(placement: .topBarLeading) {
+            cancelOrBackButton
+          }
+        }
+        
+        ToolbarItem(placement: .topBarTrailing) {
+          submitButton
+        }
       }
     }
   }
