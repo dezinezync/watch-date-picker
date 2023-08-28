@@ -230,6 +230,7 @@ public struct DatePicker<Label: View>: View {
       }
     }
     .toolbar {
+      #if compiler(>=5.9)
       if #available(watchOS 10, *) {
         if !displayedComponents.contains(.date) {
           ToolbarItem(placement: .topBarLeading) {
@@ -241,6 +242,7 @@ public struct DatePicker<Label: View>: View {
           submitButton
         }
       }
+      #endif
     }
   }
 
